@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/dashboard_menu"
+        android:icon="@android:drawable/ic_dialog_dialer"
+        android:title="Tableau de bord" />
+
+    <item
+        android:id="@+id/list_menu"
+        android:icon="@android:drawable/ic_menu_compass"
+        android:title="Liste" />
+    <item
+        android:id="@+id/watching_menu"
+        android:icon="@android:drawable/ic_menu_zoom"
+        android:title="En cours..." />
+    <item
+        android:id="@+id/add_menu"
+        android:icon="@android:drawable/ic_input_add"
+        android:title="Ajouter" />
+</menu>

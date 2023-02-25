@@ -18,6 +18,9 @@ public class Content {
     @ColumnInfo(name = "stars")
     public float stars;
 
+    @ColumnInfo(name = "review")
+    public String review;
+
     @ColumnInfo(name = "content_type")
     public ContentType contentType;
 
@@ -29,4 +32,6 @@ public class Content {
 
     @ColumnInfo(name = "link")
     public String link;
+
+
 }
