@@ -65,7 +65,7 @@ public class Main extends AppCompatActivity {
         db = ContentDatabase.getInstance(this);
     }
     private void initExternalContent(){
-        externalContent = new ArrayList<String>();
+        externalContent = new ArrayList<>();
         externalContent.add("Test");
         externalContent.add("Transformers 4");
     }
@@ -78,9 +78,13 @@ public class Main extends AppCompatActivity {
         return db.contentDAO().findByName(name);
     }
     public static void insertContent(Content content){
-        db.contentDAO().insertUser(content);
+        db.contentDAO().insertContent(content);
     }
     public static void deleteContent(Content content){
         db.contentDAO().delete(content);
+    }
+
+    public static void updateContent(Content content){
+        db.contentDAO().updateContent(content);
     }
 }

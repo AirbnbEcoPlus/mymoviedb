@@ -10,12 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,11 +47,27 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
     Spinner contentType;
 
+    EditText epField;
+
+    EditText saisonField;
+
+    EditText reviewField;
+
+    SeekBar starBar;
+
+    TextView starText;
+
+    Button addButton;
+
     ArrayAdapter<String> externalContentAdapter;
 
     private ContentType contentTypeResult;
 
     private String contentName;
+
+    private boolean contentFinish;
+
+    private int starStatus;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -109,6 +129,18 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
         contentType = getView().findViewById(R.id.contentType);
 
+        epField = getView().findViewById(R.id.epNumber);
+
+        saisonField = getView().findViewById(R.id.saisonNumber);
+
+        reviewField = getView().findViewById(R.id.editTextTextMultiLine);
+
+        starBar = getView().findViewById(R.id.starBar);
+
+        starText = getView().findViewById(R.id.Note);
+
+        addButton = getView().findViewById(R.id.addBtn);
+
         String[] contentItems = new String[]{"Film", "Série", "Anime"};
         ArrayAdapter<String> contentAdapter = new ArrayAdapter<>(getView().getContext(), android.R.layout.simple_spinner_dropdown_item, contentItems);
         contentType.setAdapter(contentAdapter);
@@ -145,18 +177,56 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
                 if(b){
                     reviewLayout.setVisibility(View.VISIBLE);
                     watchingLayout.setVisibility(View.GONE);
+                    contentFinish = true;
                 }else{
                     reviewLayout.setVisibility(View.GONE);
                     watchingLayout.setVisibility(View.VISIBLE);
+                    contentFinish = false;
                 }
             }
         });
+
+        starBar.setMax(20);
+        starBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                starText.setText("Note : " + i);
+                starStatus = i;
+
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                insertContent();
+            }
+        });
+
+
     }
 
-    public void onClickAdd(View v){
+    public void insertContent(){
         Content content = new Content();
         content.contentType = contentTypeResult;
         content.name = contentName;
+        content.finish = contentFinish;
+        if(!epField.getText().toString().isEmpty() || !saisonField.getText().toString().isEmpty()){
+            content.ep = Integer.parseInt(epField.getText().toString());
+            content.season = Integer.parseInt(saisonField.getText().toString());
+        }
+        content.review = reviewField.getText().toString();
+        content.stars = starStatus;
+        Main.insertContent(content);
+
 
 
     }

@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import fr.endide.mymoviedb.data.entity.Content;
 import fr.endide.mymoviedb.data.interfaces.ContentDAO;
 
-@Database(entities = {Content.class}, version = 1)
+@Database(entities = {Content.class}, version = 5)
 public abstract class ContentDatabase extends RoomDatabase {
     public abstract ContentDAO contentDAO();
 
@@ -17,7 +17,7 @@ public abstract class ContentDatabase extends RoomDatabase {
 
     public static ContentDatabase getInstance(Context context){
         if(INSTANCE == null){
-            INSTANCE = Room.databaseBuilder(context.getApplicationContext(), ContentDatabase.class, "DB_CONTENT").allowMainThreadQueries().build();
+            INSTANCE = Room.databaseBuilder(context.getApplicationContext(), ContentDatabase.class, "DB_CONTENT").allowMainThreadQueries().fallbackToDestructiveMigration().build();
         }
         return INSTANCE;
     }

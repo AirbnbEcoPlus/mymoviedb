@@ -11,6 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import fr.endide.mymoviedb.adapter.ListViewAdapter;
 import fr.endide.mymoviedb.data.entity.Content;
 
 /**
@@ -72,9 +76,9 @@ public class ListFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
         personalContentList = getView().findViewById(R.id.contentListView);
 
-        ArrayAdapter<Content> personalContentAdapter = new ArrayAdapter<Content>(getView().getContext(), android.R.layout.simple_list_item_1, Main.getPersonalContent());
+        List<Content> personalContentViewed = Main.getPersonalContent().stream().filter(content -> content.finish).collect(Collectors.toList());
 
-        personalContentList.setAdapter(personalContentAdapter);
+        personalContentList.setAdapter(new ListViewAdapter(this.getContext(), personalContentViewed));
 
 
     }

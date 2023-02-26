@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -17,8 +18,11 @@ public interface ContentDAO {
     @Query("SELECT * FROM content WHERE name LIKE :name")
     Content findByName(String name);
 
+    @Update
+    void updateContent(Content... content);
+
     @Insert
-    void insertUser(Content... content);
+    void insertContent(Content... content);
 
     @Delete
     void delete(Content content);

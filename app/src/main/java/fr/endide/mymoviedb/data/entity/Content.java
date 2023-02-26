@@ -1,12 +1,14 @@
 package fr.endide.mymoviedb.data.entity;
 
+import android.media.Image;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
 public class Content {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public int uid;
 
     @ColumnInfo(name = "name")
@@ -16,7 +18,7 @@ public class Content {
     public String description;
 
     @ColumnInfo(name = "stars")
-    public float stars;
+    public int stars;
 
     @ColumnInfo(name = "review")
     public String review;
@@ -30,8 +32,13 @@ public class Content {
     @ColumnInfo(name = "ep")
     public int ep;
 
+    @ColumnInfo(name = "finish")
+    public boolean finish;
+
     @ColumnInfo(name = "link")
     public String link;
 
+    @ColumnInfo(typeAffinity = ColumnInfo.BLOB, name = "cover")
+    public byte[] cover;
 
 }

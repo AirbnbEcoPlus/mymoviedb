@@ -74,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="21"
                     android:ems="10"
-                    android:inputType="numberSigned" />
+                    android:inputType="number" />
 
                 <TextView
                     android:id="@+id/textSaison"
@@ -89,7 +89,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="21"
                     android:ems="10"
-                    android:inputType="numberSigned" />
+                    android:inputType="number" />
 
                 <Space
                     android:layout_width="109dp"
@@ -124,7 +124,7 @@
                     android:text="Note : null" />
 
                 <SeekBar
-                    android:id="@+id/seekBar"
+                    android:id="@+id/starBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
@@ -157,7 +157,6 @@
             android:id="@+id/addBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onClickAdd"
             android:text="Ajouter" />
     </LinearLayout>
 </FrameLayout>
