@@ -38,6 +38,9 @@ public class Content {
     @ColumnInfo(name = "link")
     public String link;
 
+    @ColumnInfo(name = "extId")
+    public String extId;
+
     @ColumnInfo(typeAffinity = ColumnInfo.BLOB, name = "cover")
     public byte[] cover;
 

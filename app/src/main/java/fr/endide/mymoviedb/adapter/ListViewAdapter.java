@@ -5,12 +5,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import java.util.List;
 
+import fr.endide.mymoviedb.Main;
 import fr.endide.mymoviedb.R;
+import fr.endide.mymoviedb.ViewFragment;
 import fr.endide.mymoviedb.data.entity.Content;
 
 public class ListViewAdapter extends BaseAdapter {
@@ -19,10 +26,13 @@ public class ListViewAdapter extends BaseAdapter {
     private LayoutInflater layoutInflater;
     private Context context;
 
-    public ListViewAdapter(Context context, List<Content> contents){
+    private FragmentManager fragmentManager;
+
+    public ListViewAdapter(Context context, List<Content> contents, FragmentManager fragmentManager){
         this.context = context;
         this.listData = contents;
         this.layoutInflater = LayoutInflater.from(context);
+        this.fragmentManager = fragmentManager;
 
     }
 
@@ -43,6 +53,8 @@ public class ListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
+        int position = i;
+
         view = layoutInflater.inflate(R.layout.list_layout, null);
 
         Content currentContent = (Content) getItem(i);
@@ -61,7 +73,19 @@ public class ListViewAdapter extends BaseAdapter {
         contentImage.setImageResource(context.getResources().getIdentifier("noimgcover", "drawable", context.getPackageName()));
 
         //View Button
-
+        Button viewButton = view.findViewById(R.id.contentViewBtn);
+        viewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Main.viewPosition = position;
+                replaceFragment(new ViewFragment(), fragmentManager);
+            }
+        });
         return view;
+    }
+    private void replaceFragment(Fragment fragment, FragmentManager fragmentManager){
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frameLayout, fragment);
+        fragmentTransaction.commit();
     }
 }

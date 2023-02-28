@@ -2,11 +2,19 @@ package fr.endide.mymoviedb;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import fr.endide.mymoviedb.adapter.WatchingViewAdapter;
+import fr.endide.mymoviedb.data.entity.Content;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +22,8 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class WatchingFragment extends Fragment {
+
+    ListView personalContentWatching;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,5 +70,11 @@ public class WatchingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_watching, container, false);
+    }
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
+        personalContentWatching = getView().findViewById(R.id.watchingListView);
+        List<Content> personalContentNotViewed = Main.getPersonalContent().stream().filter(content -> !content.finish).collect(Collectors.toList());
+        personalContentWatching.setAdapter(new WatchingViewAdapter(this.getContext(), personalContentNotViewed));
     }
 }

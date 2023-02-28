@@ -21,9 +21,6 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.endide.mymoviedb.data.entity.Content;
 import fr.endide.mymoviedb.data.entity.ContentType;
 
@@ -33,7 +30,6 @@ import fr.endide.mymoviedb.data.entity.ContentType;
  * create an instance of this fragment.
  */
 public class AddFragment extends Fragment implements AdapterView.OnItemSelectedListener {
-
 
     SearchView searchBar;
 
@@ -147,11 +143,20 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         contentType.setOnItemSelectedListener(this);
 
         reviewLayout.setVisibility(View.GONE);
-        watchingLayout.setVisibility(View.VISIBLE);
+        watchingLayout.setVisibility(View.GONE);
 
         externalContentAdapter = new ArrayAdapter<>(getView().getContext(), android.R.layout.simple_list_item_1, Main.externalContent);
         searchList.setAdapter(externalContentAdapter);
         searchList.setVisibility(View.GONE);
+
+        searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                searchBar.setQuery(searchList.getItemAtPosition(i).toString(), false);
+                searchList.setVisibility(View.GONE);
+            }
+        });
         searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -166,7 +171,6 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
                     searchList.setVisibility(View.VISIBLE);
                 }
                 contentName = s;
-                externalContentAdapter.getFilter().filter(s);
                 return false;
             }
         });
@@ -178,10 +182,12 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
                     reviewLayout.setVisibility(View.VISIBLE);
                     watchingLayout.setVisibility(View.GONE);
                     contentFinish = true;
+
                 }else{
                     reviewLayout.setVisibility(View.GONE);
-                    watchingLayout.setVisibility(View.VISIBLE);
+                    watchingLayout.setVisibility(View.GONE);
                     contentFinish = false;
+                    contentType.setSelection(0);
                 }
             }
         });
@@ -237,12 +243,15 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         switch (position) {
             case 0:
                 contentTypeResult = ContentType.FILM;
+                watchingLayout.setVisibility(View.GONE);
                 break;
             case 1:
                 contentTypeResult = ContentType.SERIES;
+                watchingLayout.setVisibility(View.VISIBLE);
                 break;
             case 2:
                 contentTypeResult = ContentType.ANIME;
+                watchingLayout.setVisibility(View.VISIBLE);
                 break;
 
         }

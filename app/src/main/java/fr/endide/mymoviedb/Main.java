@@ -21,6 +21,8 @@ import fr.endide.mymoviedb.databinding.MainActivityBinding;
 public class Main extends AppCompatActivity {
     static ContentDatabase db;
 
+    public static int viewPosition;
+
     MainActivityBinding binding;
 
     public static ArrayList<String> externalContent;

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ViewFragment">
+
+    <ScrollView
+        android:layout_width="391dp"
+        android:layout_height="783dp"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/viewHeader"
+                android:layout_width="match_parent"
+                android:layout_height="230dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/noimgcover" />
+
+                <LinearLayout
+                    android:layout_width="114dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/viewName"
+                        android:layout_width="match_parent"
+                        android:layout_height="68dp"
+                        android:text="TextView" />
+
+                    <TextView
+                        android:id="@+id/viewDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="TextView" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/viewReviewText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Review personel :" />
+
+            <EditText
+                android:id="@+id/viewReviewField"
+                android:layout_width="match_parent"
+                android:layout_height="185dp"
+                android:ems="10"
+                android:inputType="textPersonName" />
+
+            <LinearLayout
+                android:id="@+id/viewStarsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/viewStarsText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Note :" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/viewLinkBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Web" />
+
+            <Button
+                android:id="@+id/viewDeleteBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="DELETE" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

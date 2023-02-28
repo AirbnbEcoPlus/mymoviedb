@@ -9,11 +9,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import java.util.List;
 
 import fr.endide.mymoviedb.Main;
 import fr.endide.mymoviedb.R;
 import fr.endide.mymoviedb.data.entity.Content;
+import fr.endide.mymoviedb.data.entity.ContentType;
 
 public class WatchingViewAdapter extends BaseAdapter {
 
@@ -56,25 +61,51 @@ public class WatchingViewAdapter extends BaseAdapter {
         TextView contentDesc = view.findViewById(R.id.contentDescription);
         contentDesc.setText(currentContent.description);
 
-        TextView contentSeason = view.findViewById(R.id.textSaison);
+        TextView contentSeason = view.findViewById(R.id.saisonText);
         contentSeason.setText("Saison " + currentContent.season);
 
-        TextView contentEp = view.findViewById(R.id.textEp);
+        TextView contentEp = view.findViewById(R.id.epText);
         contentEp.setText("Episode " + currentContent.ep);
 
         Button incrementSeason = view.findViewById(R.id.incrementSaison);
         incrementSeason.setOnClickListener(view1 -> {
             currentContent.ep = 0;
             currentContent.season += 1;
-            Main.insertContent(currentContent);
+            Main.updateContent(currentContent);
+            notifyDataSetChanged();
         });
 
+        Button incrementEp = view.findViewById(R.id.incrementEpisode);
+        incrementEp.setOnClickListener(view1 -> {
+            currentContent.ep += 1;
+            Main.updateContent(currentContent);
+            notifyDataSetChanged();
+        });
+
+        if(currentContent.contentType == ContentType.FILM){
+            contentSeason.setVisibility(View.GONE);
+            contentEp.setVisibility(View.GONE);
+            incrementEp.setVisibility(View.GONE);
+            incrementSeason.setVisibility(View.GONE);
+        }
+
+        Button finishBtn = view.findViewById(R.id.finishButton);
+        finishBtn.setOnClickListener(view1 -> {
+            currentContent.ep = 0;
+            currentContent.season = 0;
+            currentContent.finish = true;
+            Main.updateContent(currentContent);
+            notifyDataSetChanged();
+        });
+
+
         //Image
-        ImageView contentImage = view.findViewById(R.id.contentImage);
+        ImageView contentImage = view.findViewById(R.id.watchingImage);
         contentImage.setImageResource(context.getResources().getIdentifier("noimgcover", "drawable", context.getPackageName()));
 
         //View Button
 
         return view;
     }
+
 }
