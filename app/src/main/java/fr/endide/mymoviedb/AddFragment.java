@@ -1,9 +1,12 @@
 package fr.endide.mymoviedb;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -180,6 +183,7 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
                     searchList.setVisibility(View.VISIBLE);
                 }
                 apiClient.search(s, searchListAdapter);
+                searchListAdapter.getFilter().filter(s);
 
                 contentName = s;
                 return false;
@@ -239,7 +243,24 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         content.extId = currentSearch.extId;
         content.description = currentSearch.description;
         content.coverPath = currentSearch.cover_path;
-        Main.insertContent(content);
+        new AlertDialog.Builder(getContext())
+                .setTitle("Enregistrement..")
+                .setMessage("Votre Contenue a été enregistrée")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        searchBar.setQuery("", false);
+                        searchBar.clearFocus();
+                        switchBtn.setChecked(false);
+                        contentType.setSelection(0);
+                        starBar.setProgress(0);
+                        reviewField.setText("");
+                        Main.insertContent(content);
+                        apiClient.getPoster(content);
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     @Override

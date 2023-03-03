@@ -1,6 +1,7 @@
 package fr.endide.mymoviedb.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Environment;
@@ -21,9 +22,8 @@ import java.util.List;
 
 import fr.endide.mymoviedb.Main;
 import fr.endide.mymoviedb.R;
-import fr.endide.mymoviedb.ViewFragment;
+import fr.endide.mymoviedb.ViewActivity;
 import fr.endide.mymoviedb.data.entity.Content;
-import fr.endide.mymoviedb.data.externalApi.apiClient;
 
 public class ListViewAdapter extends BaseAdapter {
 
@@ -58,7 +58,7 @@ public class ListViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        int position = i;
+
 
         view = layoutInflater.inflate(R.layout.list_layout, null);
 
@@ -89,8 +89,9 @@ public class ListViewAdapter extends BaseAdapter {
         viewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Main.viewPosition = position;
-                replaceFragment(new ViewFragment(), fragmentManager);
+                Intent viewActivity = new Intent(context, ViewActivity.class);
+                viewActivity.putExtra("content", currentContent.uid);
+                context.startActivity(viewActivity);
             }
         });
         return view;

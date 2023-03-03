@@ -15,6 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import fr.endide.mymoviedb.Main;
 import fr.endide.mymoviedb.adapter.SearchListAdapter;
@@ -54,7 +55,9 @@ public class apiClient {
                 if (response.isSuccessful()) {
                     moviedbSearchEntity entity = response.body();
                     for (int i = 0; i < entity.results.size(); i++) {
-                        Main.externalContent.add(new SearchEntity(entity.results.get(i).title, entity.results.get(i).overview, null, entity.results.get(i).id, entity.results.get(i).poster_path));
+                        if(!containsName(Main.externalContent, entity.results.get(i).id)){
+                            Main.externalContent.add(new SearchEntity(entity.results.get(i).title, entity.results.get(i).overview, null, entity.results.get(i).id, entity.results.get(i).poster_path));
+                        }
                     }
                     adapter.notifyDataSetChanged();
                 }
@@ -66,6 +69,10 @@ public class apiClient {
             }
         });
 
+
+    }
+    public boolean containsName(final List<SearchEntity> list, final Integer extId){
+        return list.stream().anyMatch(o -> extId.equals(o.extId));
     }
     public void getPoster(Content content) {
         Retrofit retrofit = new Retrofit.Builder()

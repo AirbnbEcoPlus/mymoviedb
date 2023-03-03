@@ -77,6 +77,9 @@ public class Main extends AppCompatActivity {
     public static Content getContent(String name){
         return db.contentDAO().findByName(name);
     }
+    public static Content getContentById(int id){
+        return db.contentDAO().findById(id);
+    }
     public static void insertContent(Content content){
         db.contentDAO().insertContent(content);
     }

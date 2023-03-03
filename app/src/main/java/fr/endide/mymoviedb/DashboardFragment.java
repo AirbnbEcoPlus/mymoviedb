@@ -70,16 +70,7 @@ public class DashboardFragment extends Fragment {
     }
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
-        Button downloadCovers = view.findViewById(R.id.downloadCover);
-        downloadCovers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                List<Content> contents = Main.getPersonalContent();
-                apiClient apiClient =new apiClient();
-                for(int i = 0; contents.size() > i ; i++){
-                    apiClient.getPoster(contents.get(i));
-                }
-            }
-        });
+
+
     }
 }

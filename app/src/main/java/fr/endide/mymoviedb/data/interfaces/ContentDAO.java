@@ -18,6 +18,9 @@ public interface ContentDAO {
     @Query("SELECT * FROM content WHERE name LIKE :name")
     Content findByName(String name);
 
+    @Query("SELECT * FROM content WHERE uid LIKE :uid")
+    Content findById(int uid);
+
     @Update
     void updateContent(Content... content);
 
