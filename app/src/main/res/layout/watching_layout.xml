@@ -8,8 +8,8 @@
 
     <TextView
         android:id="@+id/contentTitle"
-        android:layout_width="345dp"
-        android:layout_height="47dp"
+        android:layout_width="229dp"
+        android:layout_height="23dp"
         android:layout_marginStart="18dp"
         android:layout_marginTop="16dp"
         android:text="Title"
@@ -30,13 +30,16 @@
 
     <TextView
         android:id="@+id/contentDescription"
-        android:layout_width="336dp"
-        android:layout_height="29dp"
+        android:layout_width="228dp"
+        android:layout_height="89dp"
         android:layout_marginStart="18dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/incrementSaison"
         app:layout_constraintStart_toEndOf="@+id/watchingImage"
-        app:layout_constraintTop_toBottomOf="@+id/contentTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/contentTitle"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/incrementSaison"

@@ -6,6 +6,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.Date;
+
 @Entity
 public class Content {
     @PrimaryKey(autoGenerate = true)
@@ -39,9 +41,9 @@ public class Content {
     public String link;
 
     @ColumnInfo(name = "extId")
-    public String extId;
+    public int extId;
 
-    @ColumnInfo(typeAffinity = ColumnInfo.BLOB, name = "cover")
-    public byte[] cover;
+    @ColumnInfo(name = "cover_path")
+    public String coverPath;
 
 }

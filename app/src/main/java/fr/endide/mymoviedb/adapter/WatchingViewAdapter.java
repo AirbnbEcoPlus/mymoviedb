@@ -1,6 +1,9 @@
 package fr.endide.mymoviedb.adapter;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.io.File;
 import java.util.List;
 
 import fr.endide.mymoviedb.Main;
@@ -57,6 +61,7 @@ public class WatchingViewAdapter extends BaseAdapter {
 
         TextView contentTitle = view.findViewById(R.id.contentTitle);
         contentTitle.setText(currentContent.name);
+        contentTitle.setTypeface(null, Typeface.BOLD);
 
         TextView contentDesc = view.findViewById(R.id.contentDescription);
         contentDesc.setText(currentContent.description);
@@ -101,7 +106,12 @@ public class WatchingViewAdapter extends BaseAdapter {
 
         //Image
         ImageView contentImage = view.findViewById(R.id.watchingImage);
-        contentImage.setImageResource(context.getResources().getIdentifier("noimgcover", "drawable", context.getPackageName()));
+        File imageLocation = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/MyMovieDB/Covers" + File.separator + currentContent.extId + ".jpg");
+        if(imageLocation.exists()){
+            contentImage.setImageBitmap(BitmapFactory.decodeFile(imageLocation.getAbsolutePath()));
+        }else{
+            contentImage.setImageResource(context.getResources().getIdentifier("noimgcover", "drawable", context.getPackageName()));
+        }
 
         //View Button
 

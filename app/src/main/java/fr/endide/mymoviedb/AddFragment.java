@@ -21,8 +21,11 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import fr.endide.mymoviedb.adapter.SearchListAdapter;
 import fr.endide.mymoviedb.data.entity.Content;
 import fr.endide.mymoviedb.data.entity.ContentType;
+import fr.endide.mymoviedb.data.entity.SearchEntity;
+import fr.endide.mymoviedb.data.externalApi.apiClient;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +33,10 @@ import fr.endide.mymoviedb.data.entity.ContentType;
  * create an instance of this fragment.
  */
 public class AddFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+
+    SearchEntity currentSearch;
+
+    apiClient apiClient = new apiClient();
 
     SearchView searchBar;
 
@@ -54,8 +61,6 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
     TextView starText;
 
     Button addButton;
-
-    ArrayAdapter<String> externalContentAdapter;
 
     private ContentType contentTypeResult;
 
@@ -145,16 +150,20 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         reviewLayout.setVisibility(View.GONE);
         watchingLayout.setVisibility(View.GONE);
 
-        externalContentAdapter = new ArrayAdapter<>(getView().getContext(), android.R.layout.simple_list_item_1, Main.externalContent);
-        searchList.setAdapter(externalContentAdapter);
+        SearchListAdapter searchListAdapter = new SearchListAdapter(getView().getContext());
+        searchList.setAdapter(searchListAdapter);
+        searchList.setTextFilterEnabled(true);
         searchList.setVisibility(View.GONE);
+
+
 
         searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                searchBar.setQuery(searchList.getItemAtPosition(i).toString(), false);
+                SearchEntity content = (SearchEntity) adapterView.getItemAtPosition(i);
+                searchBar.setQuery(content.name, false);
                 searchList.setVisibility(View.GONE);
+                currentSearch = content;
             }
         });
         searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -170,11 +179,12 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
                 }else{
                     searchList.setVisibility(View.VISIBLE);
                 }
+                apiClient.search(s, searchListAdapter);
+
                 contentName = s;
                 return false;
             }
         });
-
         switchBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -191,7 +201,6 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
                 }
             }
         });
-
         starBar.setMax(20);
         starBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -209,17 +218,13 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
             }
         });
-
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 insertContent();
             }
         });
-
-
     }
-
     public void insertContent(){
         Content content = new Content();
         content.contentType = contentTypeResult;
@@ -231,10 +236,10 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         }
         content.review = reviewField.getText().toString();
         content.stars = starStatus;
+        content.extId = currentSearch.extId;
+        content.description = currentSearch.description;
+        content.coverPath = currentSearch.cover_path;
         Main.insertContent(content);
-
-
-
     }
 
     @Override

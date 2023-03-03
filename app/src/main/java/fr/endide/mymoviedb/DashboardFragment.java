@@ -2,11 +2,18 @@ package fr.endide.mymoviedb;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import java.util.List;
+
+import fr.endide.mymoviedb.data.entity.Content;
+import fr.endide.mymoviedb.data.externalApi.apiClient;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,5 +67,19 @@ public class DashboardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_dashboard, container, false);
+    }
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
+        Button downloadCovers = view.findViewById(R.id.downloadCover);
+        downloadCovers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<Content> contents = Main.getPersonalContent();
+                apiClient apiClient =new apiClient();
+                for(int i = 0; contents.size() > i ; i++){
+                    apiClient.getPoster(contents.get(i));
+                }
+            }
+        });
     }
 }
