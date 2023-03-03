@@ -3,13 +3,8 @@ package fr.endide.mymoviedb.data.externalApi;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -21,14 +16,11 @@ import fr.endide.mymoviedb.Main;
 import fr.endide.mymoviedb.adapter.SearchListAdapter;
 import fr.endide.mymoviedb.data.entity.Content;
 import fr.endide.mymoviedb.data.entity.SearchEntity;
-import fr.endide.mymoviedb.data.entity.moviedbEntity;
-import fr.endide.mymoviedb.data.entity.moviedbSearchEntity;
+import fr.endide.mymoviedb.data.entity.moviedbSearchMovieEntity;
 
-import okhttp3.Request;
+import fr.endide.mymoviedb.data.entity.moviedbSearchTvEntity;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -45,18 +37,43 @@ public class apiClient {
 
     moviedbService service = retrofit.create(moviedbService.class);
 
-    public void search(String name, SearchListAdapter adapter) {
+    public void searchMovie(String name, SearchListAdapter adapter) {
 
-        Call<moviedbSearchEntity> searchEntity = service.searchEntity(API_KEY, name, "fr");
+        Call<moviedbSearchMovieEntity> searchEntity = service.searchMovie(API_KEY, name, "fr");
 
-        searchEntity.enqueue(new retrofit2.Callback<moviedbSearchEntity>() {
+        searchEntity.enqueue(new retrofit2.Callback<moviedbSearchMovieEntity>() {
             @Override
-            public void onResponse(Call<moviedbSearchEntity> call, retrofit2.Response<moviedbSearchEntity> response) {
+            public void onResponse(Call<moviedbSearchMovieEntity> call, retrofit2.Response<moviedbSearchMovieEntity> response) {
                 if (response.isSuccessful()) {
-                    moviedbSearchEntity entity = response.body();
+                    moviedbSearchMovieEntity entity = response.body();
                     for (int i = 0; i < entity.results.size(); i++) {
                         if(!containsName(Main.externalContent, entity.results.get(i).id)){
                             Main.externalContent.add(new SearchEntity(entity.results.get(i).title, entity.results.get(i).overview, null, entity.results.get(i).id, entity.results.get(i).poster_path));
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<moviedbSearchMovieEntity> call, Throwable t) {
+                System.out.println("Error: " + t.getMessage());
+            }
+        });
+
+
+    }
+    public void searchTv(String name, SearchListAdapter adapter) {
+
+        Call<moviedbSearchTvEntity> searchEntity = service.searchSeries(API_KEY, name, "fr");
+
+        searchEntity.enqueue(new retrofit2.Callback<moviedbSearchTvEntity>() {
+            @Override
+            public void onResponse(Call<moviedbSearchTvEntity> call, retrofit2.Response<moviedbSearchTvEntity> response) {
+                if (response.isSuccessful()) {
+                    moviedbSearchTvEntity entity = response.body();
+                    for (int i = 0; i < entity.results.size(); i++) {
+                        if(!containsName(Main.externalContent, entity.results.get(i).id)){
+                            Main.externalContent.add(new SearchEntity(entity.results.get(i).name, entity.results.get(i).overview, null, entity.results.get(i).id, entity.results.get(i).poster_path));
                         }
                     }
                     adapter.notifyDataSetChanged();
@@ -64,7 +81,7 @@ public class apiClient {
             }
 
             @Override
-            public void onFailure(Call<moviedbSearchEntity> call, Throwable t) {
+            public void onFailure(Call<moviedbSearchTvEntity> call, Throwable t) {
                 System.out.println("Error: " + t.getMessage());
             }
         });

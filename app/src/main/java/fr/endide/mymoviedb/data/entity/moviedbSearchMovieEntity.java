@@ -2,10 +2,9 @@ package fr.endide.mymoviedb.data.entity;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class moviedbSearchEntity {
+public class moviedbSearchMovieEntity {
     @SerializedName("page")
     public String page;
     @SerializedName("results")
@@ -15,7 +14,7 @@ public class moviedbSearchEntity {
     @SerializedName("total_results")
     public int total_results;
 
-    public moviedbSearchEntity(String page, List<result> results, int total_pages, int total_results){
+    public moviedbSearchMovieEntity(String page, List<result> results, int total_pages, int total_results){
         this.page = page;
         this.results = results;
         this.total_pages = total_pages;

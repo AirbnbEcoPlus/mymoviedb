@@ -182,7 +182,8 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
                 }else{
                     searchList.setVisibility(View.VISIBLE);
                 }
-                apiClient.search(s, searchListAdapter);
+                apiClient.searchTv(s, searchListAdapter);
+                apiClient.searchMovie(s, searchListAdapter);
                 searchListAdapter.getFilter().filter(s);
 
                 contentName = s;
@@ -245,7 +246,7 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         content.coverPath = currentSearch.cover_path;
         new AlertDialog.Builder(getContext())
                 .setTitle("Enregistrement..")
-                .setMessage("Votre Contenue a été enregistrée")
+                .setMessage("Votre Contenu a été enregistré !")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
