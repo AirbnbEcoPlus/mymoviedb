@@ -5,12 +5,14 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 
 
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 import fr.endide.mymoviedb.Main;
 import fr.endide.mymoviedb.adapter.SearchListAdapter;
@@ -19,6 +21,7 @@ import fr.endide.mymoviedb.data.entity.SearchEntity;
 import fr.endide.mymoviedb.data.entity.moviedbSearchMovieEntity;
 
 import fr.endide.mymoviedb.data.entity.moviedbSearchTvEntity;
+import okhttp3.Dispatcher;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -30,6 +33,7 @@ public class apiClient {
 
     private final String IMAGE_URL = "https://image.tmdb.org/";
 
+
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -37,10 +41,17 @@ public class apiClient {
 
     moviedbService service = retrofit.create(moviedbService.class);
 
+    private Call<moviedbSearchMovieEntity> currentMovieCall;
+
+    private Call<moviedbSearchTvEntity> currentTvCall;
+
     public void searchMovie(String name, SearchListAdapter adapter) {
 
+        if(currentMovieCall != null && currentMovieCall.isExecuted()){
+            currentMovieCall.cancel();
+        }
         Call<moviedbSearchMovieEntity> searchEntity = service.searchMovie(API_KEY, name, "fr");
-
+        currentMovieCall = searchEntity;
         searchEntity.enqueue(new retrofit2.Callback<moviedbSearchMovieEntity>() {
             @Override
             public void onResponse(Call<moviedbSearchMovieEntity> call, retrofit2.Response<moviedbSearchMovieEntity> response) {
@@ -64,8 +75,11 @@ public class apiClient {
     }
     public void searchTv(String name, SearchListAdapter adapter) {
 
+        if(currentTvCall != null && currentTvCall.isExecuted()){
+            currentTvCall.cancel();
+        }
         Call<moviedbSearchTvEntity> searchEntity = service.searchSeries(API_KEY, name, "fr");
-
+        currentTvCall = searchEntity;
         searchEntity.enqueue(new retrofit2.Callback<moviedbSearchTvEntity>() {
             @Override
             public void onResponse(Call<moviedbSearchTvEntity> call, retrofit2.Response<moviedbSearchTvEntity> response) {

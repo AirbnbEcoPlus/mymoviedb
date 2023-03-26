@@ -28,6 +28,7 @@ public class Main extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+
         binding = MainActivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         replaceFragment(new DashboardFragment());

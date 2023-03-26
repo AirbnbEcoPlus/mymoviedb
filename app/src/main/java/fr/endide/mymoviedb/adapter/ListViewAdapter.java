@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,23 +20,28 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.endide.mymoviedb.Main;
 import fr.endide.mymoviedb.R;
 import fr.endide.mymoviedb.ViewActivity;
 import fr.endide.mymoviedb.data.entity.Content;
+import fr.endide.mymoviedb.data.entity.SearchEntity;
 
-public class ListViewAdapter extends BaseAdapter {
+public class ListViewAdapter extends BaseAdapter implements Filterable {
 
     private List<Content> listData;
     private LayoutInflater layoutInflater;
+
+    private List<Content> mDataFiltered;
     private Context context;
 
     private FragmentManager fragmentManager;
 
     public ListViewAdapter(Context context, List<Content> contents, FragmentManager fragmentManager){
         this.context = context;
+        this.mDataFiltered = contents;
         this.listData = contents;
         this.layoutInflater = LayoutInflater.from(context);
         this.fragmentManager = fragmentManager;
@@ -43,12 +50,12 @@ public class ListViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return listData.size();
+        return mDataFiltered.size();
     }
 
     @Override
     public Object getItem(int i) {
-        return listData.get(i);
+        return mDataFiltered.get(i);
     }
 
     @Override
@@ -62,7 +69,7 @@ public class ListViewAdapter extends BaseAdapter {
 
         view = layoutInflater.inflate(R.layout.list_layout, null);
 
-        Content currentContent = (Content) getItem(i);
+        Content currentContent = mDataFiltered.get(i);
 
         TextView contentTitle = view.findViewById(R.id.contentTitle);
         contentTitle.setText(currentContent.name);
@@ -100,5 +107,34 @@ public class ListViewAdapter extends BaseAdapter {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frameLayout, fragment);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults results = new FilterResults();
+                if (constraint == null || constraint.length() == 0) {
+                    //no constraint given, just return all the data. (no search)
+                    results.count = listData.size();
+                    results.values = listData;
+                } else {//do the search
+                    List<Content> resultsData = new ArrayList<>();
+                    String searchStr = constraint.toString().toUpperCase();
+                    for (Content o : listData)
+                        if (o.name.toUpperCase().startsWith(searchStr)) resultsData.add(o);
+                    results.count = resultsData.size();
+                    results.values = resultsData;
+                }
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                mDataFiltered = (ArrayList<Content>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 }

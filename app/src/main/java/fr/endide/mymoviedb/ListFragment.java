@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +28,8 @@ import fr.endide.mymoviedb.data.entity.Content;
 public class ListFragment extends Fragment {
 
     ListView personalContentList;
+
+    SearchView searchBar;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,6 +64,7 @@ public class ListFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setRetainInstance(true);
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -77,10 +81,23 @@ public class ListFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
         personalContentList = getView().findViewById(R.id.contentListView);
-
+        searchBar = getView().findViewById(R.id.listSearchBar);
         List<Content> personalContentViewed = Main.getPersonalContent().stream().filter(content -> content.finish).collect(Collectors.toList());
+        ListViewAdapter personalAdapter = new ListViewAdapter(this.getContext(), personalContentViewed, getFragmentManager());
+        personalContentList.setAdapter(personalAdapter);
 
-        personalContentList.setAdapter(new ListViewAdapter(this.getContext(), personalContentViewed, getFragmentManager()));
+        searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                personalAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
 
 
     }

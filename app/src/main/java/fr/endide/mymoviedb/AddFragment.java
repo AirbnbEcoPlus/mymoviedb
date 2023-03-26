@@ -106,6 +106,7 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setRetainInstance(true);
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -118,9 +119,11 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_add, container, false);
+
     }
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
+
         searchBar = getView().findViewById(R.id.searchBar);
 
         searchList = getView().findViewById(R.id.searchList);
@@ -159,6 +162,17 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         searchList.setVisibility(View.GONE);
 
 
+        contentType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                setEnabledLogic(contentFinish, contentType);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -166,6 +180,8 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
                 SearchEntity content = (SearchEntity) adapterView.getItemAtPosition(i);
                 searchBar.setQuery(content.name, false);
                 searchList.setVisibility(View.GONE);
+                watchingLayout.setVisibility(View.VISIBLE);
+                reviewLayout.setVisibility(View.VISIBLE);
                 currentSearch = content;
             }
         });
@@ -179,8 +195,12 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
             public boolean onQueryTextChange(String s) {
                 if(s.matches("")){
                     searchList.setVisibility(View.GONE);
+                    watchingLayout.setVisibility(View.VISIBLE);
+                    reviewLayout.setVisibility(View.VISIBLE);
                 }else{
                     searchList.setVisibility(View.VISIBLE);
+                    watchingLayout.setVisibility(View.GONE);
+                    reviewLayout.setVisibility(View.GONE);
                 }
                 apiClient.searchTv(s, searchListAdapter);
                 apiClient.searchMovie(s, searchListAdapter);
@@ -193,17 +213,7 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
         switchBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(b){
-                    reviewLayout.setVisibility(View.VISIBLE);
-                    watchingLayout.setVisibility(View.GONE);
-                    contentFinish = true;
-
-                }else{
-                    reviewLayout.setVisibility(View.GONE);
-                    watchingLayout.setVisibility(View.GONE);
-                    contentFinish = false;
-                    contentType.setSelection(0);
-                }
+                setEnabledLogic(b, contentType);
             }
         });
         starBar.setMax(20);
@@ -287,5 +297,29 @@ public class AddFragment extends Fragment implements AdapterView.OnItemSelectedL
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         // TODO Auto-generated method stub
+    }
+    public void setEnabledLogic(boolean radio, Spinner contentType){
+
+        //!film pas fini
+        if(contentType.getSelectedItemPosition() != 0 && !radio){
+            reviewLayout.setVisibility(View.GONE);
+            watchingLayout.setVisibility(View.VISIBLE);
+
+            contentFinish = false;
+        }
+        //fini
+        if(radio){
+            reviewLayout.setVisibility(View.VISIBLE);
+            watchingLayout.setVisibility(View.GONE);
+
+            contentFinish = true;
+        }
+        //pas fini film
+        if(contentType.getSelectedItemPosition() == 0 && !radio){
+            reviewLayout.setVisibility(View.GONE);
+            watchingLayout.setVisibility(View.GONE);
+
+            contentFinish = false;
+        }
     }
 }

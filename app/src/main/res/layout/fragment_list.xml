@@ -5,8 +5,22 @@
     android:layout_height="match_parent"
     tools:context=".ListFragment">
 
-    <ListView
-        android:id="@+id/contentListView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <SearchView
+            android:id="@+id/listSearchBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </SearchView>
+
+        <ListView
+            android:id="@+id/contentListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
 </FrameLayout>
